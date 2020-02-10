@@ -3,6 +3,7 @@ package ch.commands;
 import ch.bot.MessengerSingleton;
 import ch.helper.PropertiesReader;
 import org.telegram.telegrambots.meta.api.objects.Update;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -12,7 +13,7 @@ public class TurnOffPC implements Command {
     private String ipAddr;
     private String user;
     private String password;
-    private String SHUTDOWN_CMD = "net rpc shutdown -I %s -U %s";
+    private String SHUTDOWN_CMD = "sudo net rpc shutdown -I %s -U %s";
     public static final String PC_INFORMATION = "turnOff.properties";
     private MessengerSingleton messengerSingleton;
 
@@ -31,25 +32,19 @@ public class TurnOffPC implements Command {
     }
 
     private void shutdown() {
-        ProcessBuilder processBuilder = new ProcessBuilder();
-        processBuilder.command("cmd.exe", SHUTDOWN_CMD);
-
+        Process p;
         try {
-            Process process = processBuilder.start();
-
-            BufferedReader reader =
-                    new BufferedReader(new InputStreamReader(process.getInputStream()));
-
-            String line;
-            while ((line = reader.readLine()) != null) {
-                System.out.println(line);
+            p = Runtime.getRuntime().exec(SHUTDOWN_CMD);
+            BufferedReader br = new BufferedReader(new InputStreamReader(p.getInputStream()));
+            String tmp;
+            while ((tmp = br.readLine()) != null) {
+                System.out.println("[LINE]: " + tmp);
             }
+            p.waitFor();
+            System.out.println("[EXIT]: " + p.exitValue());
+            p.destroy();
+        } catch (Exception e) {
 
-            int exitCode = process.waitFor();
-            System.out.println("\nExited with error code : " + exitCode);
-
-        } catch (IOException | InterruptedException e) {
-            e.printStackTrace();
         }
     }
 
