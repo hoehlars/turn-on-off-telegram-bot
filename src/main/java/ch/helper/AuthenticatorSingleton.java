@@ -23,6 +23,7 @@ public class AuthenticatorSingleton {
 
             String line;
             while((line = br.readLine())!=null) {
+                line = line.replace("ö", "oe");
                 authedUsers.add(line);
             }
 

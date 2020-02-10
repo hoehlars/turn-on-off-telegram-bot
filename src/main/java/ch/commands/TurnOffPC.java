@@ -27,7 +27,6 @@ public class TurnOffPC implements Command {
         String userAndPassword = user + "%" + password;
         SHUTDOWN_CMD = String.format(SHUTDOWN_CMD, ipAddr, userAndPassword);
         messengerSingleton.sendMessageToUser("Turned PC off!");
-        System.out.println(SHUTDOWN_CMD);
         shutdown();
     }
 

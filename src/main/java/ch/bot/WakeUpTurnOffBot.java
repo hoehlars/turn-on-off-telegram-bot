@@ -30,6 +30,7 @@ public class WakeUpTurnOffBot extends org.telegram.telegrambots.bots.TelegramLon
     @Override
     public void onUpdateReceived(Update update) {
         String user = update.getMessage().getFrom().getFirstName() + " " + update.getMessage().getFrom().getLastName();
+        user = user.replace("ö", "oe");
         messengerSingleton.setChatId(update.getMessage().getChatId());
 
         if(authenticator.authenticate(user)) {
